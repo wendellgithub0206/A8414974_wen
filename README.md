@@ -7,6 +7,8 @@
 ### 編碼
 使用大量2D [`Vector`](https://docs.microsoft.com/zh-tw/cpp/standard-library/vector-class?view=vs-2019)<br />
 使用讀取鍵盤[`conio`函式](https://www.runoob.com/w3cnote/c-get-keycode.html)<br />
+使用取亂數[`ctime`rand()](https://blog.gtwang.org/programming/c-cpp-rand-random-number-generation-tutorial-examples)<br />
+使用'Windows.h' systram("cls")控制清空畫面<br />
 簡單條件運算子<br />
 拆成三個檔案  snake.h 、  snake.cpp  、 main.cpp<br />
 
