@@ -117,3 +117,88 @@ int main()
 					}
 				}
 			}
+			dirVec = newDirVec;
+
+			// 將每蛇節設定在 space 上
+			for (int i = 0; i < (int)snakeVec.size(); i++)
+			{
+				// 蛇移動一步
+				snakeVec[i].move();
+				newSpace[snakeVec[i].getPos()[0]][snakeVec[i].getPos()[1]] = 'X';
+			}
+
+			// 取得蛇頭位置
+			int y = snakeVec[0].getPos()[0];
+			int x = snakeVec[0].getPos()[1];
+			
+			// 確認是否遊戲失敗 (撞到牆壁)
+			if (y == 0 || y == spaceHeight-1 || x == 0 || x == spaceWidth-1) break;
+
+			// 確認是否遊戲失敗 (撞到蛇身)
+			bool gameover = false;
+			for (int i = 1; i < (int)snakeVec.size(); i++)
+			{
+				int y2 = snakeVec[i].getPos()[0];
+				int x2 = snakeVec[i].getPos()[1];
+				if (y == y2 && x == x2)
+				{
+					gameover = true;
+					break;
+				}
+			}
+			if (gameover == true) break;
+
+			// 確認是否吃到食物，吃到才會進入
+			if (y == foodPos[0] && x == foodPos[1])
+			{
+				// 取得最後一蛇節位置
+				vector<int> pos = snakeVec[(int)snakeVec.size() - 1].getPos();
+				vector<int> dir = snakeVec[(int)snakeVec.size() - 1].getDir();
+				pos[0] -= dir[0];
+				pos[1] -= dir[1];
+
+				// 增加蛇節
+				snakeVec.push_back(Snake(pos, dir));
+
+				// 更新食物位置
+				foodPos = getNewFoodPos();
+
+				// 增加分數
+				score += 10;
+
+				// 累計增加40分就增加難度
+				if (score % 40 == 0 && level < 5) level++;
+			}
+
+			// 將食物設定在 space 上
+			newSpace[foodPos[0]][foodPos[1]] = '$';
+
+			// 更新遊戲格子畫面
+			refreshWindow(newSpace);
+		}
+
+		// 使用者有按鍵盤才會進去
+		if (kbhit())
+		{
+			char ch = getch();
+			if (ch == 72 || ch == 80 || ch == 75 || ch == 77)
+			{
+				vector<int> dir; // {dirY, dirX, index}
+				if (ch == 72) // UP
+					dir = { -1, 0 };
+				else if (ch == 80) // DOWN
+					dir = { 1, 0 };
+				else if (ch == 75) // LEFT
+					dir = { 0, -1 };
+				else if (ch == 77) // RIGHT
+					dir = { 0, 1 };
+				dir.push_back(0);
+				dirVec.push_back(dir);
+			}
+		}
+	}
+
+	cout << endl << "遊戲結束！" << endl << endl;
+	system("pause");
+	return 0;
+}
